@@ -6,6 +6,8 @@ const dotenv = require("dotenv");
 const path = require("path");
 
 dotenv.config();
+const indexRouter = require("./routes"); // route폴더에 있는 라우터 불러오기
+const userRouter = require("./routes/user");
 const app = express();
 app.set("port", process.env.PORT || 3000);
 
@@ -27,6 +29,14 @@ app.use(
     name: "session-cookie",
   })
 );
+
+app.use("/", indexRouter); // route폴더의 라우터 사용
+app.use("/user", userRouter);
+
+// 에러처리 코드
+app.use((req, res, next) => {
+  res.status(404).send("Not Found");
+});
 
 app.use((req, res, next) => {
   console.log("모든 요청에 다 실행됩니다.");
