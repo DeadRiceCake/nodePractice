@@ -4,12 +4,20 @@ const cookieParser = require("cookie-parser");
 const session = require("express-session");
 const dotenv = require("dotenv");
 const path = require("path");
+const nunjucks = require("nunjucks");
 
 dotenv.config();
 const indexRouter = require("./routes"); // route폴더에 있는 라우터 불러오기
 const userRouter = require("./routes/user");
 const app = express();
 app.set("port", process.env.PORT || 3000);
+app.set("views", path.join(__dirname, "views"));
+app.set("view engine", "html");
+
+nunjucks.configure("views", {
+  express: app,
+  watch: true,
+});
 
 app.use(morgan("dev"));
 // static : 정적 파일 제공(css, js, 이미지파일 등을 public폴더에 넣으면 브라우저에서 접근 가능)
@@ -35,27 +43,16 @@ app.use("/user", userRouter);
 
 // 에러처리 코드
 app.use((req, res, next) => {
-  res.status(404).send("Not Found");
+  const error = new Error(`${req.method} ${req.url} 라우터가 없습니다.`);
+  error.status = 404;
+  next(error);
 });
-
-app.use((req, res, next) => {
-  console.log("모든 요청에 다 실행됩니다.");
-  next();
-});
-app.get(
-  "/",
-  (req, res, next) => {
-    console.log("GET / 요청에만 실행됩니다.");
-    next();
-  },
-  (req, res) => {
-    throw new Error("에러는 에러 처리 미들웨어로 갑니다.");
-  }
-);
 
 app.use((err, req, res, next) => {
-  console.error(err);
-  res.status(500).send(err.message);
+  res.locals.message = err.message;
+  res.locals.error = process.env.NODE_ENV !== 'production' ? err : {};
+  res.status(err.status || 500);
+  res.render('error');
 });
 
 // app.get("/", (req, res) => {
