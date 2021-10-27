@@ -3,15 +3,17 @@ const { isLoggedIn, isNotLoggedIn } = require('./middlewares');
 
 const router = express.Router();
 
-router.use((req, res, next) => {
+// 페이지 라우터
+
+router.use((req, res, next) => { // 넌적스(프론트)에서 사용할 수 있도록 res.locals객체에 값을 담아줌
     res.locals.user = req.user;
-    res.locals.user = null;
     res.locals.followerCount = 0;
+    res.locals.followingCount = 0;
     res.locals.followerIdList = [];
     next();
 });
 
-router.get('/profile', isLoggedIn, (req, res) => {
+router.get('/profile', isLoggedIn, (req, res) => { // 로그인 상태여야 res.render의 파일이 렌더링됨
     res.render('profile', { title: '내 정보 - NodeBird' });
 });
 

@@ -1,5 +1,6 @@
 const Sequelize = require('sequelize');
 
+// 시퀄라이즈 테이블(post) 생성 모델
 module.exports = class Post extends Sequelize.Model {
     static init(sequelize) {
         return super.init({
@@ -23,6 +24,7 @@ module.exports = class Post extends Sequelize.Model {
         });
     }
 
+    // hashtag테이블과의 관계 설정
     static associate(db) {
         db.Post.belongsTo(db.User);
         db.Post.belongsToMany(db.Hashtag, { through: 'PostHashtag' });

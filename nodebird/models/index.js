@@ -5,6 +5,9 @@ const User = require('./user');
 const Post = require('./post');
 const Hashtag = require('./hashtag');
 
+// DB관련 모듈
+// 각각의 테이블 모델들을 시퀄라이즈 객체에 연결
+
 const db = {};
 const sequelize = new Sequelize(
   config.database, config.username, config.password, config,

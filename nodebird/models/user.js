@@ -1,5 +1,6 @@
 const Sequelize = require('sequelize');
 
+// 시퀄라이즈 테이블(user) 생성 모델
 module.exports = class User extends Sequelize.Model {
     static init(sequelize) {
         return super.init({
@@ -37,6 +38,7 @@ module.exports = class User extends Sequelize.Model {
         });
     }
 
+    // 테이블과의 관계 설정
     static associate(db) {
         db.User.hasMany(db.Post);
         db.User.belongsToMany(db.User, {
