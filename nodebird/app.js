@@ -12,6 +12,8 @@ const passport = require('passport');
 dotenv.config();
 const pageRouter = require('./routes/page');
 const authRouter = require('./routes/auth');
+const postRouter = require('./routes/post');
+const userRouter = require('./routes/user');
 const { sequelize } = require('./models');
 const passportConfig = require('./passport');
 
@@ -34,7 +36,9 @@ sequelize.sync({ force: false })
 
 // 모듈 연결
 app.use(morgan('dev'));
+// *express.static(): 정적 파일을 사용할 수 있도록 해줌
 app.use(express.static(path.join(__dirname, 'public')));
+app.use('/img', express.static(path.join(__dirname, 'uploads')));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser(process.env.COOKIE_SECRET));
@@ -53,6 +57,8 @@ app.use(passport.session());
 // 라우터 연결
 app.use('/', pageRouter);
 app.use('/auth', authRouter);
+app.use('/post', postRouter);
+app.use('/user', userRouter);
 
 // 라우터 주소가 없을 경우
 app.use((req, res, next) => { 
