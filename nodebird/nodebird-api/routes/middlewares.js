@@ -43,7 +43,7 @@ exports.verifyToken = (req, res, next) => {
 
 exports.apiLimiter = new RateLimit({
     windowMs: 60 * 1000, // 1분
-    max: 1,
+    max: 10,
     handler(req, res) {
         res.status(this.statusCode).json({
             code: this.statusCode, // 기본값 429
