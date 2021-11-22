@@ -10,12 +10,10 @@ const router = express.Router();
 
 // uploads 폴더 읽기(없으면 생성)
 try {
-    if (!fs.readFileSync('uploads')) {
-        fs.mkdirSync('uploads');
-    }
-    fs.readFileSync('uploads'); 
+    fs.readdirSync('uploads'); 
 } catch (error) {
-    console.error(error);
+    console.error('uploads폴더가 없어 uploads 폴더를 생성합니다.');
+    fs.mkdirSync('uploads');
 }
 
 // 이미지 파일 업로드
